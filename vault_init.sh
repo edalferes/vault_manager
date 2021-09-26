@@ -19,7 +19,6 @@ info_header(){
     echo  "Description: Script for install and configure a single HashiCorp Vault server."
 }
 
-
 # Use log info <function> <msg>
 log_info(){
 
@@ -28,7 +27,7 @@ log_info(){
 	DT=$(date "+%Y/%m/%d %H:%M:%S")
 	STR_CONSOLE="${TEXT_COLOR_INIT} [${DT}] - [INFO] - [${1}]: ${2} ${TEXT_COLOR_FINAL}"
   STR_FILE="[${DT}] - [INFO] - [${1}]: ${2}"
-  echo -e ${STR_CONSOLE}
+  echo ${STR_CONSOLE}
   echo ${STR_FILE} >> ${LOG_FILE}
 }
 
@@ -40,7 +39,7 @@ log_warning(){
 	DT=$(date "+%Y/%m/%d %H:%M:%S")
 	STR_CONSOLE="${TEXT_COLOR_INIT} [${DT}] - [INFO] - [${1}]: ${2} ${TEXT_COLOR_FINAL}"
   STR_FILE="[${DT}] - [INFO] - [${1}]: ${2}"
-  echo -e ${STR_CONSOLE}
+  echo ${STR_CONSOLE}
   echo ${STR_FILE} >> ${LOG_FILE}
 }
 
@@ -52,7 +51,7 @@ log_error(){
 	DT=$(date "+%Y/%m/%d %H:%M:%S")
 	STR_CONSOLE="${TEXT_COLOR_INIT} [${DT}] - [INFO] - [${1}]: ${2} ${TEXT_COLOR_FINAL}"
   STR_FILE="[${DT}] - [INFO] - [${1}]: ${2}"
-  echo -e ${STR_CONSOLE}
+  echo ${STR_CONSOLE}
   echo ${STR_FILE} >> ${LOG_FILE}
 }
 
@@ -79,33 +78,15 @@ validate_parameters() {
   fi
 }
 
-check_app() {
-
-  log_info "check_app" "Verifying that the client has the apps"
-
-  curl --version > /dev/null
-  if [[ ${?} != 0 ]]; then
-    log_error "check_app" "The curl app was not found, install curl to continue"
-    exit 1
-  fi
-
-  wget --version > /dev/null
-  if [[ ${?} != 0 ]]; then
-    log_error "check_app" "The wget app was not found, install wget to continue"
-    exit 1
-  fi
-
-  unzip -h > /dev/null
-  if [[ ${?} != 0 ]]; then
-    log_error "check_app" "The unzip app was not found, install curl to continue"
-    exit 1
-  fi
-}
-
-
 install_vault() {
 
-	log_info "install_vault" "Install Vault"
+	log_info "install_vault" "Install Vault server"
+
+  apt-get update
+
+  apt-get install -f wget unzip
+
+  clear
 
   vault_package="vault_${VAULT_VERSION}_linux_amd64.zip"
 
@@ -113,7 +94,7 @@ install_vault() {
 
   wget -O ${vault_package} -q --show-progress ${vault_url_download}
 
-  sudo unzip ${vault_package} -d /usr/local/bin
+  unzip ${vault_package} -d /usr/local/bin
 
   rm -rf ${vault_package}
 
@@ -121,11 +102,25 @@ install_vault() {
 
 }
 
+uninstall_vault() {
+
+  log_info "uninstall_vault" "Uninstall vault server"
+
+  vault_stop
+
+  rm -rf /usr/local/bin/vault
+  rm -rf ${VAULT_CONFIG_PATH}
+  rm -rf ${VAULT_ROOT_PATH}
+  rm -rf /etc/systemd/system/vault.service
+  systemctl daemon-reload
+  userdel vault
+}
+
 create_user_vault() {
 
   log_info "create_user_vault" "Configure system user vault"
 
-  sudo useradd --system --home /etc/vault.d --shell /bin/false vault
+  useradd --system --home /etc/vault.d --shell /bin/false vault
 
 }
 
@@ -137,7 +132,7 @@ configure_path() {
     
     log_info "configure_path_permissions" "Directory ${VAULT_CONFIG_PATH} do not exist, creating..."
 
-    sudo mkdir -p ${VAULT_CONFIG_PATH}
+    mkdir -p ${VAULT_CONFIG_PATH}
     
   fi
 
@@ -145,8 +140,8 @@ configure_path() {
     
     log_info "configure_path_permissions" "Directory ${VAULT_ROOT_PATH} do not exist, creating..."
 
-    sudo mkdir -p ${VAULT_ROOT_PATH}/data
-    sudo mkdir -p ${VAULT_ROOT_PATH}/tls
+    mkdir -p ${VAULT_ROOT_PATH}/data
+    mkdir -p ${VAULT_ROOT_PATH}/tls
   fi
 }
 
@@ -160,7 +155,7 @@ configure_systemd () {
   
   log_info "configure_systemd" "Configure systemd"
 
-  cat <<EOF | sudo tee /etc/systemd/system/vault.service
+  cat <<EOF | tee /etc/systemd/system/vault.service
 
 [Unit]
 Description="HashiCorp Vault - A tool for managing secrets"
@@ -198,7 +193,7 @@ configure_server_file() {
 
   log_info "configure_server_file" "Configure server file: ${VAULT_CONFIG_PATH}/config.hcl"
 
-  cat <<EOF | sudo tee ${VAULT_CONFIG_PATH}/config.hcl
+  cat <<EOF | tee ${VAULT_CONFIG_PATH}/config.hcl
 
 api_addr = "http://0.0.0.0:8200"
 cluster_name = "vault"
@@ -224,25 +219,25 @@ configure_permission() {
 
   log_info "configure_permission" "Configure Permission"
 
-  sudo chown -R vault:vault ${VAULT_CONFIG_PATH} ${VAULT_ROOT_PATH}
+  chown -R vault:vault ${VAULT_CONFIG_PATH} ${VAULT_ROOT_PATH}
 }
 
 vault_start() {
 
   log_info "start_vault" "Start Vault"
 
-  sudo systemctl enable vault.service
-  sudo systemctl start vault.service
-  sudo systemctl daemon-reload
+  systemctl enable vault.service
+  systemctl start vault.service
+  systemctl daemon-reload
 }
 
 vault_stop() {
-  sudo systemctl stop vault.service
-  sudo systemctl daemon-reload
+  systemctl stop vault.service
+  systemctl daemon-reload
 }
 
 vault_status() {
-  sudo systemctl status vault.service
+  systemctl status vault.service
 }
 
 help_info() {
@@ -253,6 +248,7 @@ help_info() {
     echo " Use option to script: " 
     echo ""
     echo " --install          - Install and configure vault server."
+    echo " --uninstall        - Uninstall vault server."
     echo " --start            - Start vault server."
     echo " --stop             - Stop vault server."
     echo " --status           - Status vault server."
@@ -261,9 +257,9 @@ help_info() {
 }
 
 main() {
-  validate_parameters
-  check_app
 
+  validate_parameters
+  
   local OPTION=${1}
 
     case ${OPTION} in
@@ -275,7 +271,10 @@ main() {
         configure_systemd
         configure_server_file
         configure_permission
-        start_vault    
+        vault_start    
+      ;;
+      --uninstall)
+        uninstall_vault
       ;;
       --start)
         vault_start
