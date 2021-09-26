@@ -1,5 +1,7 @@
 # Vault Manager
 
+![logo_vault](./docs/images/vault_icon.png)
+
 Script for install and configure a single HashiCorp Vault server.
 
 ## Execute
