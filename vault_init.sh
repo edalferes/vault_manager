@@ -15,33 +15,33 @@ log_info(){
     TEXT_COLOR_FINAL="\e[0m"
 	DT=$(date "+%Y/%m/%d %H:%M:%S")
 	STR_CONSOLE="${TEXT_COLOR_INIT} [${DT}] - [INFO] - [${1}]: ${2} ${TEXT_COLOR_FINAL}"
-    STR_FILE="[${DT}] - [INFO] - [${1}]: ${2}"
-    echo -e ${STR_CONSOLE}
-    echo ${STR_FILE} >> ${LOG_FILE}
+  STR_FILE="[${DT}] - [INFO] - [${1}]: ${2}"
+  echo -e ${STR_CONSOLE}
+  echo ${STR_FILE} >> ${LOG_FILE}
 }
 
 # Use log warning <function> <msg>
 log_warning(){
 
 	TEXT_COLOR_INIT="\e[1;33m"
-    TEXT_COLOR_FINAL="\e[0m"
+  TEXT_COLOR_FINAL="\e[0m"
 	DT=$(date "+%Y/%m/%d %H:%M:%S")
 	STR_CONSOLE="${TEXT_COLOR_INIT} [${DT}] - [INFO] - [${1}]: ${2} ${TEXT_COLOR_FINAL}"
-    STR_FILE="[${DT}] - [INFO] - [${1}]: ${2}"
-    echo -e ${STR_CONSOLE}
-    echo ${STR_FILE} >> ${LOG_FILE}
+  STR_FILE="[${DT}] - [INFO] - [${1}]: ${2}"
+  echo -e ${STR_CONSOLE}
+  echo ${STR_FILE} >> ${LOG_FILE}
 }
 
 # Use log error <function> <msg>
 log_error(){
 
 	TEXT_COLOR_INIT="\e[1;31m"
-    TEXT_COLOR_FINAL="\e[0m"
+  TEXT_COLOR_FINAL="\e[0m"
 	DT=$(date "+%Y/%m/%d %H:%M:%S")
 	STR_CONSOLE="${TEXT_COLOR_INIT} [${DT}] - [INFO] - [${1}]: ${2} ${TEXT_COLOR_FINAL}"
-    STR_FILE="[${DT}] - [INFO] - [${1}]: ${2}"
-    echo -e ${STR_CONSOLE}
-    echo ${STR_FILE} >> ${LOG_FILE}
+  STR_FILE="[${DT}] - [INFO] - [${1}]: ${2}"
+  echo -e ${STR_CONSOLE}
+  echo ${STR_FILE} >> ${LOG_FILE}
 }
 
 
@@ -49,7 +49,6 @@ log_error(){
 install_vault() {
 
 	log_info "install_vault" "Install Vault"
-
 
 }
 
@@ -68,5 +67,8 @@ create_certificate() {
 }
 
 main() {
-    log_info "main" "test_log"
+
+  log_info "main" "test_log"
 }
+
+main $@
