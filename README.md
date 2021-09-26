@@ -17,7 +17,7 @@ sudo ./vault_init.sh
 ```bash
 Script: vault_init.sh
 Version: 1.0.0
-Maintainer: Edmilson Alferes <edmilson.alferes@kantaribopemedia.com>
+Maintainer: Edmilson Alferes <edmilson.alferes@alpheres.com>
 Description: Script for install and configure a single HashiCorp Vault server.
 
  Use option to script: 
