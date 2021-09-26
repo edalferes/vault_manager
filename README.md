@@ -12,8 +12,8 @@ sudo ./vault_init.sh
 
 ## Options:
 
-```
-Script: rtm_tools.sh
+```bash
+Script: vault_init.sh
 Version: 1.0.0
 Maintainer: Edmilson Alferes <edmilson.alferes@kantaribopemedia.com>
 Description: Script for install and configure a single HashiCorp Vault server.
@@ -26,5 +26,4 @@ Description: Script for install and configure a single HashiCorp Vault server.
  --stop             - Stop vault server.
  --status           - Status vault server.
  --help | -h        - Show this info.
-
 ```

@@ -13,9 +13,9 @@ VAULT_ROOT_PATH=""
 
 info_header(){
     echo ""
-    echo  "Script: rtm_tools.sh"
+    echo  "Script: $(basename "$0")"
     echo  "Version: $(cat VERSION)"
-    echo  "Maintainer: Edmilson Alferes <edmilson.alferes@kantaribopemedia.com>"
+    echo  "Maintainer: Edmilson Alferes <edmilson.alferes@alpheres.com>"
     echo  "Description: Script for install and configure a single HashiCorp Vault server."
 }
 
