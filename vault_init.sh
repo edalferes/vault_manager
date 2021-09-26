@@ -16,7 +16,7 @@ info_header(){
     echo  "Script: rtm_tools.sh"
     echo  "Version: $(cat VERSION)"
     echo  "Maintainer: Edmilson Alferes <edmilson.alferes@kantaribopemedia.com>"
-    echo  "Description: This package includes modules to create backup / restore of mysql,  search stations management and elasticsearch snapshot control."
+    echo  "Description: Script for install and configure a single HashiCorp Vault server."
 }
 
 
@@ -227,20 +227,22 @@ configure_permission() {
   sudo chown -R vault:vault ${VAULT_CONFIG_PATH} ${VAULT_ROOT_PATH}
 }
 
-start_vault() {
+vault_start() {
 
   log_info "start_vault" "Start Vault"
 
   sudo systemctl enable vault.service
   sudo systemctl start vault.service
   sudo systemctl daemon-reload
-  sudo systemctl status vault
 }
 
-stop_vault() {
+vault_stop() {
   sudo systemctl stop vault.service
   sudo systemctl daemon-reload
-  sudo systemctl status vault
+}
+
+vault_status() {
+  sudo systemctl status vault.service
 }
 
 help_info() {
@@ -253,6 +255,7 @@ help_info() {
     echo " --install          - Install and configure vault server."
     echo " --start            - Start vault server."
     echo " --stop             - Stop vault server."
+    echo " --status           - Status vault server."
     echo " --help | -h        - Show this info."
     echo ""
 }
@@ -275,10 +278,13 @@ main() {
         start_vault    
       ;;
       --start)
-        start_vault
+        vault_start
       ;;
       --stop)
-        stop_vault
+        vault_stop
+      ;;
+      --status)
+        vault_status
       ;;
       --help | -h)
         help_info
