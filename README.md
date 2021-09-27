@@ -20,7 +20,7 @@ We need to setup systemd init file to manage the persistent vault daemon. We nee
 
 ```
 $ apt-get update
-$ apt-get install ansible
+$ apt-get install ansible sshpass
 ```
 
 ## Setup
