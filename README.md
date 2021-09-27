@@ -23,7 +23,9 @@ $ apt-get update
 $ apt-get install ansible
 ```
 
-- Create the **host.ini** file in the **inventory** folder with the following contents
+## Setup
+
+Create the **host.ini** file in the **inventory** folder with the following contents
 
 ```
 <MY_IP> ansible_ssh_user='<MY_USER>' ansible_ssh_pass='<MY_PASSWORD>' ansible_port=22 ansible_become_password="MY_ROOT_PASSWORD"
