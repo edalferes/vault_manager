@@ -1,2 +1,5 @@
 *.log
 *.zip
+inventory/host.ini
+rootkey
+unseal_key_*

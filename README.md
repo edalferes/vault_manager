@@ -2,30 +2,20 @@
 
 ![logo_vault](./docs/images/vault_icon.png)
 
-Script for install and configure a single [HashiCorp Vault](https://www.vaultproject.io/) server.
+[HashiCorp Vault](https://www.vaultproject.io/) setup using Ansible Role
 
-## Execute
+## requirements
 
-run script **vault_init.sh** as root:
+- Install ansible
 
 ```
-sudo ./vault_init.sh
+$ apt-get update
+$ apt-get install ansible
 ```
 
-## Options:
+- Create the **host.ini** file in the **inventory** folder with the following contents
 
-```bash
-Script: vault_init.sh
-Version: 1.0.0
-Maintainer: Edmilson Alferes <edmilson.alferes@alpheres.com>
-Description: Script for install and configure a single HashiCorp Vault server.
-
- Use option to script: 
-
- --install          - Install and configure vault server.
- --uninstall        - Uninstall vault server.
- --start            - Start vault server.
- --stop             - Stop vault server.
- --status           - Status vault server.
- --help | -h        - Show this info.
 ```
+<MY_IP> ansible_ssh_user='<MY_USER>' ansible_ssh_pass='<MY_PASSWORD>' ansible_port=22 ansible_become_password="MY_ROOT_PASSWORD"
+```
+
